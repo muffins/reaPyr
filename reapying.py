@@ -49,7 +49,11 @@
 #
 #
 
-import sys, os, subprocess, pytsk3
+import sys
+import os
+import subprocess
+import pytsk3
+import argparse
 
 # Main handler. This should fire up classes of all reapers.
 def main(di):
