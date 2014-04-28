@@ -1,6 +1,4 @@
- Nick Anderson 02/24/2014
 
- Digital Forensics, Spring 2014 - CS 6963 Final Project
 
 ```
                ______           
@@ -13,7 +11,7 @@
                      |___/  
 ```
 
-
+Digital Forensics, Spring 2014 - CS 6963 Final Project
 
 ###About
     
