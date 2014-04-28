@@ -1,26 +1,32 @@
 
 """
- Nick Anderson 02/24/2014
+Nick Anderson 02/24/2014
 
- Digital Forensics, Spring 2014 - CS 6963 Final Project
+Digital Forensics, Spring 2014 - CS 6963 Final Project
+
+reaPyr.py
+
+Usage:
+
+    user@system:~$ reaPyr.py [-h] -f FILENAME -d DISKNAME [-o OFFSET] [-ss SECTSIZE]
+
+    File carving from disk images.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -f FILENAME, --filename FILENAME
+                            File name to be carved out of the disk image.
+      -d DISKNAME, --diskname DISKNAME
+                            Name of the disk image to reap.
+      -o OFFSET, --offset OFFSET
+                            Offset into disk where OS resides. Default is 0.
+      -ss SECTSIZE, --sectsize SECTSIZE
+                            Sector size of OS. Default is 512 bytes.
 
 
 
-Notes:
+See README.md for additional information.
 
-    At this point, reaPyr needs to bring in the following things
-
-    * Disk Image name
-    * Offset into the disk image where the OS resides
-    * 
-
-
-Future Work:
-    * Make a 'Disk' class out of the functionality in the fs_walk,
-    so that reaPyr's only job is to make the Disk object, and then
-    hand that off to each reaper.
-
-    * Add multiple OS support.
 
 """
 
