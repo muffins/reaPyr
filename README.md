@@ -1,4 +1,4 @@
-http://static.giantbomb.com/uploads/original/15/155745/2263839-terran_reaper__starcraft_ii_by_oxoxoxo.jpg
+https://github.com/PoppySeedPlehzr/reaPyr/blob/master/imgs/reaper.jpg
 ```
                ______           
                | ___ \          
@@ -69,7 +69,7 @@ Nick Anderson - nba237@nyu.edu
 
 ###Citations
 
-* Thanks to XXXX for the baller image of an SC2 Reaper.  Link [here](http://static.giantbomb.com/uploads/original/15/155745/2263839-terran_reaper__starcraft_ii_by_oxoxoxo.jpg)
+* Thanks to someone awesome for the baller image of an SC2 Reaper.  Link [here](http://static.giantbomb.com/uploads/original/15/155745/2263839-terran_reaper__starcraft_ii_by_oxoxoxo.jpg)
 
 * [creddump](https://code.google.com/p/creddump/)
 
