@@ -28,14 +28,12 @@ sets.
 ###Usage
 
 ```bash
-user@system:~$ reaPyr.py [-h] -f FILENAME -d DISKNAME [-o OFFSET] [-ss SECTSIZE]
+user@system:~$ reaPyr.py [-h] -d DiskImage [-o OS Offset (Default 0)] [-ss Sector Size (Default 512)]
 
 File carving from disk images.
 
 optional arguments:
   -h, --help            show this help message and exit
-  -f FILENAME, --filename FILENAME
-                        File name to be carved out of the disk image.
   -d DISKNAME, --diskname DISKNAME
                         Name of the disk image to reap.
   -o OFFSET, --offset OFFSET
@@ -44,9 +42,13 @@ optional arguments:
                         Sector size of OS. Default is 512 bytes.
 ```
 
-###Notes
-* reaPyr needs all arguments to stand up the disk correctly
-* Once the disk is ready, call each reaping function handing the disk image as the only(?) argument
+###TODO
+* Think about deleting ./disk_rec/ after each reap
+* Think about aggregating harvest files to central_harvest in main dir
+* Add IE Harvesting Support
+* Add FF Harvesting Support
+* Add Chrome Harvesting Support
+* Add IM Harvesting Support
 
 ###Future Work
 * Add support for running on multiple OS

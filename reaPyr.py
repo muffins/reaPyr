@@ -73,18 +73,14 @@ def reap(img, offs=0, ss=0):
 
 
 
-
-
-
-
 if __name__ == "__main__":
 
     if sys.platform[:3] != 'lin':
         print("ERROR: reaPyr currently only runs on linux.")
         sys.exit()
 
-    p = argparse.ArgumentParser(description="File carving from disk images.")
-    #p.add_argument("-f","--filename",help="File name to be carved out of the disk image.", required=True)
+    p = argparse.ArgumentParser(description="This program carves, or reaps, user credentials\
+        from a specified disk image.")
     p.add_argument("-d","--diskname",help="Name of the disk image to reap.", required=True)
     p.add_argument("-o","--offset",help="Offset into disk where OS resides.  Default is 0.", required=False)
     p.add_argument("-ss","--sectsize",help="Sector size of OS.  Default is 512 bytes.", required=False)
