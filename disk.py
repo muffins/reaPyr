@@ -32,13 +32,9 @@ class Disk:
 
 
 	# Handler function for fs_walk, this 'sets the stage'
-	#def fs_walk_handler(img="", fname="", offs=0, ss=0, absf=False):
-	def __init__(self, img="", fname="", offs=0, ss=0, absf=False):
-		#global CFILE, SECT_SIZE, PART_OFFS, REC_CNT
+	def __init__(self, img="", offs=0, ss=0):
 
-		# Stash the desired file name for what we want to carve.
-		if absf: self.abseekf = fname
-		else: self.seekf = fname
+		# Setup sector and offset if provided.
 		if ss 	!= 0: self.sect_size = ss
 		if offs != 0: self.part_offs = offs
 
@@ -65,17 +61,14 @@ class Disk:
 	            print "ERROR: Unable to create ./recovered/ and dir does not exists!"
 	            sys.exit(0)
 
-
 	# Given the absolute file path to a specified file, try to carve the file
-	#def fs_carve(abs_fname, fs):
-	#def carve(self, abs_fname):
-	def carve(self):
-		cwd   = '/'.join(self.abseekf.split('/')[:-1])
-		fname = self.abseekf.split('/')[-1]
+	def carve(self, abseekf):
+		cwd   = '/'.join(abseekf.split('/')[:-1])
+		fname = abseekf.split('/')[-1]
 
-		try: f = self.fs.open(self.abseekf)
+		try: f = self.fs.open(abseekf)
 		except IOError as e:
-			print "ERROR: Unable to open %s" % self.abseekf
+			print "ERROR: Unable to open %s" % abseekf
 			sys.exit()
 				
 		# Make sure that the desired file is actually a file.
@@ -86,8 +79,6 @@ class Disk:
 			sys.exit()
 
 		if ftype == pytsk3.TSK_FS_META_TYPE_REG:
-			# fout name.
-			#fname_rec = '-'.join(abs_fname.split('/'))[1:]
 
 			# Setup environment for file carving
 			fi   = self.fs.open_meta(f.info.meta.addr)
@@ -111,7 +102,7 @@ class Disk:
 			sys.exit()
 
 	# Walk the disk, looking for the desired file to carve.
-	def search_carve(self, cwd):
+	def search_carve(self, cwd, seekf):
 		try: directory = self.fs.open_dir(cwd)
 		except IOError as e:
 			# If we are not able to open the directory, tank out
@@ -140,7 +131,7 @@ class Disk:
 
 
 				# The file is just a regular file
-				if ftype == pytsk3.TSK_FS_META_TYPE_REG and f.info.name.name == self.seekf:
+				if ftype == pytsk3.TSK_FS_META_TYPE_REG and f.info.name.name == seekf:
 
 					# Setup environment for file carving
 					fi   = self.fs.open_meta(f.info.meta.addr)
@@ -162,7 +153,7 @@ class Disk:
 					self.rec_cnt += 1
 
 				# Recurse down directories.
-				elif ftype == pytsk3.TSK_FS_META_TYPE_DIR: self.search_carve(fname_abs)
+				elif ftype == pytsk3.TSK_FS_META_TYPE_DIR: self.search_carve(fname_abs, seekf)
 				# If the item wasn't a file/directory, we don't care about it.
 				else: pass
 
@@ -184,16 +175,16 @@ if __name__ == "__main__":
 
 	offs = 0
 	ss   = 0
-	absf = False
 
-	if args.offset   != None: offs = int(args.offset)
-	if args.sectsize != None: ss   = int(args.sectsize)
-	if args.absolute != None: absf = args.absolute
+	if args.offset != None:
+		offs = int(args.offset)
 
-	# def __init__(self, img="", fname="", offs=0, ss=0, absf=False):
-	d = Disk(args.diskname, args.filename, offs, ss, absf)
+	if args.sectsize != None:
+		ss = int(args.sectsize)
+	
+	d = Disk(args.diskname, offs, ss)
 
-	if absf: d.carve(d.abseekf)
-	else: d.search_carve("/")
-
-	#fs_walk_handler(args.diskname, args.filename, offs, ss, absf)
+	if args.absolute: 
+		d.carve(args.filename)
+	else: 
+		d.search_carve("/", args.filename)

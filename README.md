@@ -1,5 +1,4 @@
-
-
+http://static.giantbomb.com/uploads/original/15/155745/2263839-terran_reaper__starcraft_ii_by_oxoxoxo.jpg
 ```
                ______           
                | ___ \          
