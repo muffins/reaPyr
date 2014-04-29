@@ -28,9 +28,9 @@ sets.
 ###Usage
 
 ```bash
-user@system:~$ reaPyr.py [-h] -d DiskImage [-o OS Offset (Default 0)] [-ss Sector Size (Default 512)]
+user@system:~$ reaPyr.py [-h] -d DISKNAME [-o OFFSET] [-ss SECTSIZE]
 
-File carving from disk images.
+This program carves, or reaps, user credentials from a specified disk image.
 
 optional arguments:
   -h, --help            show this help message and exit
