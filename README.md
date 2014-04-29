@@ -65,3 +65,12 @@ hand that off to each reaper.
 ###Author
 
 Nick Anderson - nba237@nyu.edu
+
+
+###Citations
+
+* Thanks to XXXX for the baller image of an SC2 Reaper.  Link [here](http://static.giantbomb.com/uploads/original/15/155745/2263839-terran_reaper__starcraft_ii_by_oxoxoxo.jpg)
+
+* [creddump](https://code.google.com/p/creddump/)
+
+
