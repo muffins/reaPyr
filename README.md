@@ -45,27 +45,16 @@ optional arguments:
 ```
 
 ###Notes
-
 * reaPyr needs all arguments to stand up the disk correctly
-
-* Once the disk is ready, call each reaping function handing
-the disk image as the only(?) argument
-
+* Once the disk is ready, call each reaping function handing the disk image as the only(?) argument
 
 ###Future Work
-
-* Make a 'Disk' class out of the functionality in the fs_walk,
-so that reaPyr's only job is to make the Disk object, and then
-hand that off to each reaper.
-
 * Add support for running on multiple OS
-
 * Add reapers for multiple OS
 
 ###Author
 
 Nick Anderson - nba237@nyu.edu
-
 
 ###Citations
 

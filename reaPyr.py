@@ -39,10 +39,10 @@ import disk
 import errno
 
 # import the reapers
-import win_rpr
-import google_rpr
-import mozilla_rpr
-import im_rpr
+from windows import win_rpr
+from google import google_rpr
+from mozilla import mozilla_rpr
+from im import im_rpr
 
 # Function to ensure that recovery directory exists.
 def create_dir(d):
