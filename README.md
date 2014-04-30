@@ -46,9 +46,9 @@ optional arguments:
 * Think about deleting ./disk_rec/ after each reap
 * Think about aggregating harvest files to central_harvest in main dir
 * Add IE Harvesting Support
-* Add FF Harvesting Support
-* Add Chrome Harvesting Support
-* Add IM Harvesting Support
+* Add Mozilla Harvesting Support - FF, Thunderbird
+* Add Google Harvesting Support - Chrome, GTalk
+* Add IM Harvesting Support - AIM, mIRC, MS Messenger, MSN Messenger, etc..
 
 ###Future Work
 * Add support for running on multiple OS
