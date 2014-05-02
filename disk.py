@@ -101,6 +101,30 @@ class Disk:
 			print "ERROR: %s is not a file!"
 			sys.exit()
 
+	# Return a directory listing of 'd', similar to ls or dir.
+	def dir_carve(self, d):
+
+		try: directory = self.fs.open(d)
+		except IOError as e:
+			print "ERROR: Unable to open %s" % d
+			sys.exit()
+				
+		# Make sure that the desired file is actually a file.
+		ftype = pytsk3.TSK_FS_META_TYPE_ENUM
+		try: ftype = f.info.meta.type
+		except:
+			print "ERROR: File opened had no meta type!"
+			sys.exit()
+
+		dir_list = []
+		if ftype == pytsk3.TSK_FS_META_TYPE_DIR:
+			for f in directory:
+				if f.info.name.name != '.' and f.info.name.name != '..':
+					dir_list.append(f)
+		else:
+			print "ERROR: %s is not a directory!"
+			sys.exit()
+
 	# Walk the disk, looking for the desired file to carve.
 	def search_carve(self, cwd, seekf):
 		try: directory = self.fs.open_dir(cwd)
