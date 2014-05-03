@@ -85,11 +85,6 @@ optional arguments:
                         Sector size of OS. Default is 512 bytes.
 ```
 
-###TODO
-* Think about deleting ./disk_rec/ after each reap
-* Add IE Harvesting Support
-* Add Mozilla Harvesting Support - FF, Thunderbird
-
 ###Future Work
 * Add support for running on multiple OS
 * Add reapers for multiple OS
