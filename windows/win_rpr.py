@@ -39,17 +39,16 @@ def dump(src, length=8):
 def reap(d):
 	# Registry hives containing NTLM password hashes.
 	fout = open("./windows/win_hrvst.txt",'a')
-	rprt = open("./report.csv",'a')
 
 	sam_db = "/Windows/system32/config/SAM"
 	sys_db = "/Windows/system32/config/system"
 	sec_db = "/Windows/system32/config/security"
+	sof_db = "/Windows/system32/config/software"
 
 	d.carve(sam_db)
 	d.carve(sys_db)
 	d.carve(sec_db)
-
-
+	d.carve(sof_db)
 
 	"""
 	 Now, pass off the registry files we just obtained to creddump-0.3
@@ -58,17 +57,14 @@ def reap(d):
 	"""
 
 	# Dump the file hashes
-	if os.path.exists("./disk_rec/system") and os.path.exists("./disk_rec/SAM"):
-		hashes = pwdump("./disk_rec/system","./disk_rec/SAM")
-		print hashes
+	hashes = pwdump("./disk_rec/system","./disk_rec/SAM")
 	if hashes:
 		fout.write("#"*30+"SAM HASHES"+"#"*30)
 		fout.write(hashes)
 		fout.write("\n\n")
 
 	# Dump any cached credentials
-	if os.path.exists("./disk_rec/system") and os.path.exists("./disk_rec/security"):
-		caches = cachedump("./disk_rec/system","./disk_rec/security")
+	caches = cachedump("./disk_rec/system","./disk_rec/security")
 	if caches and 'ERR' not in caches:
 		fout.write("#"*30+"CACHED PWS"+"#"*30)
 		fout.write(caches)
@@ -78,8 +74,6 @@ def reap(d):
 	# LSA Secrets is just a little different, we port the code from lsadump.pu
 	# provided by creddump, in order to redirect the output to our hrvst file.
 	# Hex dump code from
-	if os.path.exists("./disk_rec/system") and os.path.exists("./disk_rec/security"):
-		caches = cachedump("./disk_rec/system","./disk_rec/security")
 	secrets = lsadump("./disk_rec/system","./disk_rec/security")
 	if secrets != []:
 		fout.write("#"*30+"CACHED PWS"+"#"*30)
@@ -89,6 +83,8 @@ def reap(d):
 		fout.write("\n\n")
 
 	"""
-	Begin IE Harvesting - TODO
+	To Scrape:
+		* Outlook
+		* IE
 	"""
 
