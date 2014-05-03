@@ -28,6 +28,15 @@ Usage:
 See README.md for additional information.
 
 
+TODO:
+
+* IE, Skype, FF, Thunderbird, Outlook
+
+* Add/Check Vista+ Support
+
+* Look into running this on Windows????? <-- Probably wont happen :p
+
+
 """
 
 import sys
@@ -76,23 +85,22 @@ def create_dir(d):
 # This function reports any findings from the specified reaper.
 # TODO: Decide on format for the report.  Is CSV better? or should I
 # consider doing something like XML or try to finagle a PDF??
-def write_report(rpr_name):
-    global rec_dir, report_name
+def report(harvest):
+    global report_name
     fout = open(report_name, 'a')
-    for fname in os.listdir(rec_dir):
-        with open(os.path.join(rec_dir,fname), 'rb') as f:
-            fout.write(rpr_name+","+fname+",")
-            fout.write(hashlib.sha1(f.read()).hexdigest()+",")
-            fout.write(str(os.path.getsize(os.path.join(rec_dir, fname)))+"\n")
+    for s in harvest:
+        fout.write(s+"\n")
     fout.close()
 
 
-# This function moves all of the harvested files to their respective
-# harvest folder.
+# This function moves all of the harvested files from './disk_rec/' to 
+# their respective harvest folder. ./harvest/'rpr_name'/
+# Argument specified is the target folder in ./harvest
 def clean(rpr_name):
     global rec_dir, harvest_dir
     for f in os.listdir(rec_dir):
         os.rename(os.path.join(rec_dir, f), os.path.join(harvest_dir,rpr_name,f))
+
 
 # Main handler. This should fire up classes of all reapers.
 def reap(img, offs=0, ss=0):
@@ -119,16 +127,23 @@ def reap(img, offs=0, ss=0):
         itself will report any of findings, and lastly clean the 'disk_rec'
         directory so the next reaper can be run.
     """
+    # Write out the title row
+    report("Reaper Name, Carved File Name, SHA1Sum, Size of File, Description")
 
-    win_rpr.reap(d)
-    write_report("windows")
+    # Reap Windows
+    report(win_rpr.reap(d))
     clean("windows")
 
-    #google_rpr.reap(d)
-    #mozilla_rpr.reap(d)
+    # Reap Google
+    report(google_rpr.reap(d))
+    clean("google")
+
+    # Reap Mozilla
+    #report(mozilla_rpr.reap(d))
+    #clean("mozilla")
     
-    im_rpr.reap(d)
-    write_report("im")
+    # Reap IM
+    report(im_rpr.reap(d))
     clean("im")
 
 

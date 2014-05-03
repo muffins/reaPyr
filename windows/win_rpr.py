@@ -14,7 +14,7 @@
 	directory when completed.
 
 """
-import sys
+import sys, os, hashlib
 
 sys.path.append("./windows/creddump")
 
@@ -38,17 +38,53 @@ def dump(src, length=8):
 
 def reap(d):
 	# Registry hives containing NTLM password hashes.
-	fout = open("./windows/win_hrvst.txt",'a')
+	fout = open(os.path.join(d.rec_dir, "win_creds_dump.txt"),'a')
 
-	sam_db = "/Windows/system32/config/SAM"
-	sys_db = "/Windows/system32/config/system"
-	sec_db = "/Windows/system32/config/security"
-	sof_db = "/Windows/system32/config/software"
+	harvest  = []
+	rpr_name = "windows"
 
-	d.carve(sam_db)
-	d.carve(sys_db)
-	d.carve(sec_db)
-	d.carve(sof_db)
+
+	# Target registry files
+	sam_db  = "/Windows/system32/config/SAM"
+	sys_db  = "/Windows/system32/config/system"
+	sec_db  = "/Windows/system32/config/security"
+	sof_db  = "/Windows/system32/config/software"
+
+	d.carve(sam_db) # Carve the SAM DB
+	if(os.path.exists(os.path.join(d.rec_dir, "SAM"))):
+		# Append the harvested file information to the list
+		dest_fname = os.path.join(d.rec_dir, "SAM")
+		sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+		fsize      = os.path.getsize(dest_fname)
+		desc       = "Windows SAM Database"
+		harvest.append(rpr_name+",SAM,"+sha1+","+str(fsize)+","+desc)
+
+	d.carve(sys_db) # Carve the system registry
+	if(os.path.exists(os.path.join(d.rec_dir, "system"))):
+		# Append the harvested file information to the list
+		dest_fname = os.path.join(d.rec_dir, "system")
+		sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+		fsize      = os.path.getsize(dest_fname)
+		desc       = "Windows system registry hive"
+		harvest.append(rpr_name+",system,"+sha1+","+str(fsize)+","+desc)
+
+	d.carve(sec_db) # Carve the security registry
+	if(os.path.exists(os.path.join(d.rec_dir, "security"))):
+		# Append the harvested file information to the list
+		dest_fname = os.path.join(d.rec_dir, "security")
+		sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+		fsize      = os.path.getsize(dest_fname)
+		desc       = "Windows security registry hive"
+		harvest.append(rpr_name+",security,"+sha1+","+str(fsize)+","+desc)
+
+	d.carve(sof_db) # Carve the software registry
+	if(os.path.exists(os.path.join(d.rec_dir, "software"))):
+		# Append the harvested file information to the list
+		dest_fname = os.path.join(d.rec_dir, "software")
+		sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+		fsize      = os.path.getsize(dest_fname)
+		desc       = "Windows software registry hive"
+		harvest.append(rpr_name+",software,"+sha1+","+str(fsize)+","+desc)
 
 	"""
 	 Now, pass off the registry files we just obtained to creddump-0.3
@@ -59,14 +95,14 @@ def reap(d):
 	# Dump the file hashes
 	hashes = pwdump("./disk_rec/system","./disk_rec/SAM")
 	if hashes:
-		fout.write("#"*30+"SAM HASHES"+"#"*30)
+		fout.write("#"*30+"SAM HASHES"+"#"*30+"\n")
 		fout.write(hashes)
 		fout.write("\n\n")
 
 	# Dump any cached credentials
 	caches = cachedump("./disk_rec/system","./disk_rec/security")
 	if caches and 'ERR' not in caches:
-		fout.write("#"*30+"CACHED PWS"+"#"*30)
+		fout.write("#"*30+"CACHED PWS"+"#"*30+"\n")
 		fout.write(caches)
 		fout.write("\n\n")
 
@@ -76,15 +112,23 @@ def reap(d):
 	# Hex dump code from
 	secrets = lsadump("./disk_rec/system","./disk_rec/security")
 	if secrets != []:
-		fout.write("#"*30+"CACHED PWS"+"#"*30)
+		fout.write("#"*30+"CACHED PWS"+"#"*30+"\n")
 		for k in secrets:
 			fout.write(k)
 			fout.write(dump(secrets[k], length=16))
 		fout.write("\n\n")
+
+	# Append the harvested file information to the list
+	dest_fname = os.path.join(d.rec_dir, "win_creds_dump.txt")
+	sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+	fsize      = os.path.getsize(dest_fname)
+	desc       = "Credential Hash Dump of Windows Accounts"
+	harvest.append(rpr_name+",win_creds_dump.txt,"+sha1+","+str(fsize)+","+desc)
 
 	"""
 	To Scrape:
 		* Outlook
 		* IE
 	"""
+	return harvest
 
