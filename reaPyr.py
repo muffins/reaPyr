@@ -54,6 +54,21 @@ def create_dir(d):
             sys.exit(0)
 
 
+# What information do I need for this??
+"""
+    Report Format:
+    Reaper Name:
+        table of items found:
+        name of db, md5sum, file size
+                ....
+    Reaper Name:
+        table of items found:
+        name of db, md5sum, file size
+                ....
+"""
+def report():
+    pass
+
 
 # Main handler. This should fire up classes of all reapers.
 def reap(img, offs=0, ss=0):
@@ -68,7 +83,7 @@ def reap(img, offs=0, ss=0):
     win_rpr.reap(d)
     #google_rpr.reap(d)
     #mozilla_rpr.reap(d)
-    #im_rpr.reap(d)
+    im_rpr.reap(d)
 
 
 

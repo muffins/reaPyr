@@ -38,4 +38,22 @@ def dump(src, length=8):
 
 def reap(d):
 	# Registry hives containing NTLM password hashes.
-	fout = open("./im/im_hrvst.txt",'a')
+	
+	"""
+		Carve Pidgin .purple accounts file
+	"""
+
+	#C:\Documents and Settings\Administrator\Application Data\.purple  # Pidgin Accounts file
+
+	appdata_xp = "/Documents and Settings"
+	appdata_vi = "/Users"
+
+	users_xp = d.dir_carve(appdata_xp)
+	users_vi = d.dir_carve(appdata_vi)
+
+	if users_xp	!= [] and "ERROR" not in users_xp:
+		for u in users_xp:
+			print u
+	elif users_vi != [] and "ERROR" not in users_vi:
+		for u in users_vi:
+			print u
