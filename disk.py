@@ -23,6 +23,7 @@ import errno
 class Disk:
 	# Globals Section
 	fs        = pytsk3.Object
+	rec_dir   = "./disk_rec"
 	seekf     = ""
 	abseekf   = ""
 	sect_size = 512
@@ -41,14 +42,14 @@ class Disk:
 		# Use TSK to open the disk image
 		if os.path.exists(img):
 			# Create the outfile directory
-			self.create_dir("./disk_rec")
+			self.create_dir(self.rec_dir)
 
 			# Use TSK to open up the disk image
 			img     = pytsk3.Img_Info(img)
 			self.fs = pytsk3.FS_Info(img, offset=self.part_offs*self.sect_size)
 
 		else:
-			print "Unable to find disk image %s!  Exiting." % img
+			print "ERROR: nable to find disk image %s!  Exiting." % img
 			sys.exit(0)
 
 
@@ -68,21 +69,21 @@ class Disk:
 
 		try: f = self.fs.open(abseekf)
 		except IOError as e:
-			print "ERROR: Unable to open %s" % abseekf
+			return "ERROR: Unable to open %s" % abseekf
 			sys.exit()
 				
 		# Make sure that the desired file is actually a file.
 		ftype = pytsk3.TSK_FS_META_TYPE_ENUM
 		try: ftype = f.info.meta.type
 		except:
-			print "ERROR: File opened had no meta type!"
+			return "ERROR: File opened had no meta type!"
 			sys.exit()
 
 		if ftype == pytsk3.TSK_FS_META_TYPE_REG:
 
 			# Setup environment for file carving
 			fi   = self.fs.open_meta(f.info.meta.addr)
-			fout = open(os.path.join("./disk_rec",fname), 'wb')
+			fout = open(os.path.join(self.rec_dir,fname), 'wb')
 			offs = 0
 			size = fi.info.meta.size
 
@@ -98,8 +99,10 @@ class Disk:
 			# Indicate the number of files we've recovered
 			self.rec_cnt += 1
 		else:
-			print "ERROR: %s is not a file!"
+			return "ERROR: %s is not a file!"
 			sys.exit()
+			
+		return os.path.join(self.rec_dir,fname)
 
 	# Return a directory listing of 'd', similar to ls or dir.
 	def dir_carve(self, d):
@@ -152,7 +155,7 @@ class Disk:
 
 					# Setup environment for file carving
 					fi   = self.fs.open_meta(f.info.meta.addr)
-					fout = open(os.path.join("./disk_rec",fname_rec), 'wb')
+					fout = open(os.path.join(self.rec_dir,fname_rec), 'wb')
 					offs = 0
 					size = fi.info.meta.size
 					

@@ -13,8 +13,10 @@
 	* copy the win_hrvst.txt file somewhere to the root
 	directory when completed.
 
+	* Change the way that recovered file renaming is handled
+
 """
-import sys
+import sys, os
 
 sys.path.append("./windows/creddump")
 
@@ -53,7 +55,18 @@ def reap(d):
 
 	if users_xp	!= [] and "ERROR" not in users_xp:
 		for u in users_xp:
-			print u
+			fname = d.carve(appdata_xp+'/'+u+'/Application Data/.purple/accounts.xml')
+			if os.path.exists(fname):
+				f = u+"_xp_"+fname.split('/')[-1]
+				os.rename(fname,os.path.join(d.rec_dir,f))
+
 	elif users_vi != [] and "ERROR" not in users_vi:
 		for u in users_vi:
-			print u
+			d.carve(appdata_vi+'/'+u+'/Application Data/.purple/accounts.xml')
+			if os.path.exists(fname):
+				f = u+"_xp_"+fname.split('/')[-1]
+				os.rename(fname,os.path.join(d.rec_dir,f))
+
+	"""
+		Carve Skype Credentials
+	"""

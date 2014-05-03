@@ -37,12 +37,19 @@ import pytsk3
 import argparse
 import disk
 import errno
+import hashlib
 
 # import the reapers
 from windows import win_rpr
 from google import google_rpr
 from mozilla import mozilla_rpr
 from im import im_rpr
+
+# Define here the Disk Recovery Directory.  This will need to be
+# changed in ALL reaper files if altered :(  AS well as in disk.py
+rec_dir     = "./disk_rec"
+harvest_dir = "./harvest"
+report_name = "./report.csv"
 
 # Function to ensure that recovery directory exists.
 def create_dir(d):
@@ -66,24 +73,63 @@ def create_dir(d):
         name of db, md5sum, file size
                 ....
 """
-def report():
-    pass
+# This function reports any findings from the specified reaper.
+# TODO: Decide on format for the report.  Is CSV better? or should I
+# consider doing something like XML or try to finagle a PDF??
+def write_report(rpr_name):
+    global rec_dir, report_name
+    fout = open(report_name, 'a')
+    for fname in os.listdir(rec_dir):
+        with open(os.path.join(rec_dir,fname), 'rb') as f:
+            fout.write(rpr_name+","+fname+",")
+            fout.write(hashlib.sha1(f.read()).hexdigest()+",")
+            fout.write(str(os.path.getsize(os.path.join(rec_dir, fname)))+"\n")
+    fout.close()
 
+
+# This function moves all of the harvested files to their respective
+# harvest folder.
+def clean(rpr_name):
+    global rec_dir, harvest_dir
+    for f in os.listdir(rec_dir):
+        os.rename(os.path.join(rec_dir, f), os.path.join(harvest_dir,rpr_name,f))
 
 # Main handler. This should fire up classes of all reapers.
 def reap(img, offs=0, ss=0):
-    
+    global harvest_dir
     # Create the disk object
     d = disk.Disk(img, offs, ss)
 
     # Create a directory to stash our harvest!
-    create_dir("./harvest")
+    create_dir(harvest_dir)
+    create_dir(os.path.join(harvest_dir,"windows"))
+    create_dir(os.path.join(harvest_dir,"google"))
+    create_dir(os.path.join(harvest_dir,"mozilla"))
+    create_dir(os.path.join(harvest_dir,"im"))
 
-    # Reap the disk
+    """
+        Reap the Disk
+
+        ** TODO: Think about if the clean/report actions should happen
+        inside of the reapers, essentially, who's responsibility is it
+        to report the data, and cleanup the disk_rec folder.
+
+        A Reaping happens as a triple of actions.  Firstly the respective
+        reaper is called, to harvest any possible data.  Afterwords reaPyr
+        itself will report any of findings, and lastly clean the 'disk_rec'
+        directory so the next reaper can be run.
+    """
+
     win_rpr.reap(d)
+    write_report("windows")
+    clean("windows")
+
     #google_rpr.reap(d)
     #mozilla_rpr.reap(d)
+    
     im_rpr.reap(d)
+    write_report("im")
+    clean("im")
 
 
 
