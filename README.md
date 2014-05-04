@@ -83,6 +83,20 @@ be able to simply pull down this git repo and run
   $ python reaPyr.py -d <disk image> -o <offset> -s <sector size>
 ```
 
+####pytsk3
+
+If you are having troubles getting pytsk3 working, here are the steps I followed
+for a fresh Ubuntu 13.04 OS.
+
+```bash
+  sudo apt-get install build-essential linux-headers-generic libafflib-dev zlib1g-dev libtalloc-dev libtsk3*  
+  sudo pip install pytsk3
+```
+
+You can verify that pytsk3 installed properly by opening a python interpreter
+by typing `python`, and if you can run `import pytsk3` with no errors then everything
+should be setup properly.
+
 ###Usage
 
 * Below is the detailed usage of reaPyr
