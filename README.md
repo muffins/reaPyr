@@ -34,6 +34,24 @@ cleartext credential sets. Any data recovered by reaPyr is designed
 to be handed off to other 3rd party applications designed for cracking
 or getting around software encryption for stored databases.
 
+The credential sets which reaPyr currently harvests are as follows:
+* Windows NTLM Accounts
+* Windows Cached Credentials
+* Windows LSA Secrets
+* Internet Explorer
+* Mozilla Firefox
+* Google Chrome
+* Skype
+* Pidgin Accounts
+
+###Harvest
+
+Upon completion, the reaPyr program will write out a 'harvest' directory
+in which will exist a folder for each reaper file to write out any
+data successfully carved from the disk.  Alongside this 'harvest' folder
+will be a file in the root directory, report.csv, containing a report
+on all of the data carved from the disk.
+
 ###Implementation Notes
 
 * Each reaper should be stored in it's own respective directory, for
@@ -56,11 +74,33 @@ directory as reaPyr.py.  Many of the file locations are relative, and
 based around the reaPyr.py root directory.  As such, if you implement
 additional reapers, take note of this fact.
 
-###Installation
-To install reaPyr you must have the following python packages installed
+* If you are receiving the following stack traces:
+```bash
+Traceback (most recent call last):
+  File "reaPyr.py", line 176, in <module>
+    reap(args.diskname, offs, ss)
+  File "reaPyr.py", line 109, in reap
+    d = disk.Disk(img, offs, ss)
+  File "/home/nicholas/School/reaPyr/disk.py", line 50, in __init__
+    self.fs = pytsk3.FS_Info(img, offset=self.part_offs*self.sect_size)
+IOError: FS_Info_Con: (tsk3.c:189) Unable to open the image as a filesystem: Cannot determine file system type
+```
+It means that pytsk3 is unable to find the offset for the NTFS partition.
+To get reaPyr functioning correctly, run tools such as `fsstat` or `fdisk -l`
+to determine what the offset on the disk image is to the root NTFS partition
+and then hand this value to reaPyr using the `-o` option.
 
-* Python 2.7
-* pytsk3 - I recommend installing [The Sleuth Kit Frameork 4.1.2](http://sourceforge.net/projects/sleuthkit/files/sleuthkit/4.1.2/) as pytsk3 in TSK 4.1.3 is still quite buggy
+* The default sector size which reaPyr uses is 512 bytes, however this can
+be set using the `-s` option
+
+###Installation
+
+reaPyr is designed to run with python 2.7 and the [pytsk3 framework]().
+If both of these things are installed and correctly configured, you should
+be able to simply pull down this git repo and run
+```bash
+  $ python reaPyr.py -d <disk image> -o <offset> -s <sector size>
+```
 
 ###Usage
 
