@@ -44,6 +44,10 @@ def reap(d):
 	rpr_name = "windows"
 
 
+	"""
+		Windows Credential Harvest
+	"""
+
 	# Target registry files
 	sam_db  = "/Windows/system32/config/SAM"
 	sys_db  = "/Windows/system32/config/system"
@@ -125,10 +129,45 @@ def reap(d):
 	desc       = "Credential Hash Dump of Windows Accounts"
 	harvest.append(rpr_name+",win_creds_dump.txt,"+sha1+","+str(fsize)+","+desc)
 
+
+
 	"""
-	To Scrape:
-		* Outlook
-		* IE
+		IE Harvesting
 	"""
+	ie_basic_auth_xp1 = "/Documents and Settings/"
+	ie_basic_auth_xp2 = "/Application Data/Microsoft/Credentials/Credential store"
+	ie_basic_auth_vi1 = "/Users/"
+	ie_basic_auth_vi2 = "/AppData/Roaming/Microsoft/Credentials/Credential store"
+
+	users_xp = d.dir_carve(ie_basic_auth_xp1)
+	users_vi = d.dir_carve(ie_basic_auth_vi1)
+
+	if users_xp	!= [] and "ERROR" not in users_xp:
+		for u in users_xp:
+			fname = d.carve(ie_basic_auth_xp1+u+ie_basic_auth_xp2)
+			if os.path.exists(fname):
+				f = u+"_xp_"+fname.split('/')[-1]
+				os.rename(fname,os.path.join(d.rec_dir,f))
+
+				# Append the harvested file information to the list
+				dest_fname = os.path.join(d.rec_dir,f)
+				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				fsize      = os.path.getsize(dest_fname)
+				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
+
+	elif users_vi != [] and "ERROR" not in users_vi:
+		for u in users_vi:
+			fname = d.carve(ad_vi_1+"/"+u+ad_vi_2)
+			if os.path.exists(fname):
+				f = u+"_vi_"+fname.split('/')[-1]
+				os.rename(fname,os.path.join(d.rec_dir,f))
+
+				# Append the harvested file information to the list
+				dest_fname = os.path.join(d.rec_dir,f)
+				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				fsize      = os.path.getsize(dest_fname)
+				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
+
+
 	return harvest
 

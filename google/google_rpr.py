@@ -23,7 +23,7 @@ def reap(d):
 	ad_vi_2 = "/Appdata/Local/Google/Chrome/User Data/Default/Web Data"
 
 	users_xp = d.dir_carve(ad_xp_1)
-	users_vi = d.dir_carve(ad_xp_2)
+	users_vi = d.dir_carve(ad_vi_1)
 
 	if users_xp	!= [] and "ERROR" not in users_xp:
 		for u in users_xp:
@@ -34,7 +34,7 @@ def reap(d):
 
 				# Append the harvested file information to the list
 				dest_fname = os.path.join(d.rec_dir,f)
-				sha1     = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
 				fsize      = os.path.getsize(dest_fname)
 				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
 
@@ -47,7 +47,7 @@ def reap(d):
 
 				# Append the harvested file information to the list
 				dest_fname = os.path.join(d.rec_dir,f)
-				sha1     = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
 				fsize      = os.path.getsize(dest_fname)
 				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
 

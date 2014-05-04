@@ -70,14 +70,12 @@ class Disk:
 		try: f = self.fs.open(abseekf)
 		except IOError as e:
 			return "ERROR: Unable to open %s" % abseekf
-			sys.exit()
 				
 		# Make sure that the desired file is actually a file.
 		ftype = pytsk3.TSK_FS_META_TYPE_ENUM
 		try: ftype = f.info.meta.type
 		except:
 			return "ERROR: File opened had no meta type!"
-			sys.exit()
 
 		if ftype == pytsk3.TSK_FS_META_TYPE_REG:
 
@@ -100,7 +98,6 @@ class Disk:
 			self.rec_cnt += 1
 		else:
 			return "ERROR: %s is not a file!"
-			sys.exit()
 			
 		return os.path.join(self.rec_dir,fname)
 
