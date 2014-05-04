@@ -46,12 +46,12 @@ def reap(d):
 	# Registry hives containing NTLM password hashes.
 	
 	harvest  = [] # Return value
-	rpr_name = "im"
 
 	"""
 		Pidgin Harvesting
 	"""
 
+	rpr_name = "pidgin"
 	desc     = "Pidgin cached credentials file"
 	appdata_xp = "/Documents and Settings"
 	appdata_vi = "/Users"
@@ -93,6 +93,47 @@ def reap(d):
 		Skype Harvesting
 	"""
 
-	
+	rpr_name = "skype"
+	desc     = "Skype cached credentials file"
+	skype_xp_1 = "/Documents and Settings/"
+	skype_xp_2 = "/Application Data/Skype/"
+	skype_vi_1 = "/Users/"
+	skype_vi_2 = "/AppData/Skype/"
+
+	users_xp = d.dir_carve(skype_xp_1)
+	users_vi = d.dir_carve(skype_vi_1)
+
+	# Reap XP
+	if users_xp	!= [] and "ERROR" not in users_xp:
+		for u in users_xp:
+			d.search_carve(skype_xp_1+u+skype_xp_2, "config.xml")
+			if d.search_rec != '':
+				# Rename the file to include the user name, in case we have multiple users
+				f = d.search_rec.split('-')[-2]+"_config.xml"
+				dest_fname = os.path.join(d.rec_dir,f)
+				os.rename(os.path.join(d.rec_dir,d.search_rec),dest_fname)
+				d.search_rec = ''
+
+				# Append the harvested file information to the list
+				sha1   = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				fsize  = os.path.getsize(dest_fname)
+				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
+
+
+	# Reap Vista+
+	elif users_vi != [] and "ERROR" not in users_vi:
+		for u in users_vi:
+			d.search_carve(skype_vi_1+u+skype_vi_2, "config.xml")
+			if d.search_rec != '':
+				# Rename the file to include the user name, in case we have multiple users
+				f = d.search_rec.split('-')[-2]+"_config.xml"
+				dest_fname = os.path.join(d.rec_dir,f)
+				os.rename(os.path.join(d.rec_dir,d.search_rec),dest_fname)
+				d.search_rec = ''
+
+				# Append the harvested file information to the list
+				sha1   = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				fsize  = os.path.getsize(dest_fname)
+				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
 
 	return harvest

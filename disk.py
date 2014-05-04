@@ -22,14 +22,15 @@ import errno
 
 class Disk:
 	# Globals Section
-	fs        = pytsk3.Object
-	rec_dir   = "./disk_rec"
-	seekf     = ""
-	abseekf   = ""
-	sect_size = 512
-	part_offs = 0
-	rec_cnt   = 0
-	buff_size = 1024*1024
+	fs         = pytsk3.Object
+	rec_dir    = "./disk_rec"
+	search_rec = ""
+	seekf      = ""
+	abseekf    = ""
+	sect_size  = 512
+	part_offs  = 0
+	rec_cnt    = 0
+	buff_size  = 1024*1024
 
 
 	# Handler function for fs_walk, this 'sets the stage'
@@ -120,13 +121,14 @@ class Disk:
 
 	# Walk the disk, looking for the desired file to carve.
 	def search_carve(self, cwd, seekf):
+
 		try: directory = self.fs.open_dir(cwd)
 		except IOError as e:
 			# If we are not able to open the directory, tank out
 			# and continue execution.  This should be changed in the future
 			# to allow for more robust searching of the disk drive.
 			#print "ERROR: Unable to open %s" % cwd
-			return
+			return ''
 
 		# Walk through each item found in the directory opened by tsk
 		for f in directory:
@@ -146,7 +148,6 @@ class Disk:
 				# containing the absolute path on disk to the recovered file.
 				fname_rec = '-'.join(fname_abs.split('/'))[1:]
 
-
 				# The file is just a regular file
 				if ftype == pytsk3.TSK_FS_META_TYPE_REG and f.info.name.name == seekf:
 
@@ -155,7 +156,6 @@ class Disk:
 					fout = open(os.path.join(self.rec_dir,fname_rec), 'wb')
 					offs = 0
 					size = fi.info.meta.size
-					
 
 					# Recunstruct the file from the inodes
 					while offs < size:
@@ -168,9 +168,11 @@ class Disk:
 
 					# Indicate the number of files we've recovered
 					self.rec_cnt += 1
+					self.search_rec = fname_rec
 
 				# Recurse down directories.
-				elif ftype == pytsk3.TSK_FS_META_TYPE_DIR: self.search_carve(fname_abs, seekf)
+				elif ftype == pytsk3.TSK_FS_META_TYPE_DIR:
+					self.search_carve(fname_abs, seekf)
 				# If the item wasn't a file/directory, we don't care about it.
 				else: pass
 

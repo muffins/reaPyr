@@ -240,8 +240,6 @@ def reap(d):
 					harvest.append(rpr_name+","+fname+","+sha1+","+str(fsize)+","+desc)
 
 
-
-
 	"""
 		Thunderbird Harvesting
 	"""
