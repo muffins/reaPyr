@@ -74,6 +74,34 @@ directory as reaPyr.py.  Many of the file locations are relative, and
 based around the reaPyr.py root directory.  As such, if you implement
 additional reapers, take note of this fact.
 
+###Installation
+
+reaPyr is designed to run with python 2.7 and the [pytsk3 framework]().
+If both of these things are installed and correctly configured, you should
+be able to simply pull down this git repo and run
+```bash
+  $ python reaPyr.py -d <disk image> -o <offset> -s <sector size>
+```
+
+###Usage
+
+* Below is the detailed usage of reaPyr
+
+```bash
+user@system:~$ reaPyr.py [-h] -d DISKNAME [-o OFFSET] [-ss SECTSIZE]
+
+This program carves, or reaps, user credentials from a specified disk image.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DISKNAME, --diskname DISKNAME
+                        Name of the disk image to reap.
+  -o OFFSET, --offset OFFSET
+                        Offset into disk where OS resides. Default is 0.
+  -ss SECTSIZE, --sectsize SECTSIZE
+                        Sector size of OS. Default is 512 bytes.
+```
+
 * If you are receiving the following stack traces:
 ```bash
 Traceback (most recent call last):
@@ -92,38 +120,6 @@ and then hand this value to reaPyr using the `-o` option.
 
 * The default sector size which reaPyr uses is 512 bytes, however this can
 be set using the `-s` option
-
-###Installation
-
-reaPyr is designed to run with python 2.7 and the [pytsk3 framework]().
-If both of these things are installed and correctly configured, you should
-be able to simply pull down this git repo and run
-```bash
-  $ python reaPyr.py -d <disk image> -o <offset> -s <sector size>
-```
-
-###Usage
-
-A Makefile has been included for ease of operation, however it relies on a
-test disk image named 'winxp_sample.dd' existing in a directory titled 'test_images'
-in order to run.  In the event you have the image provided, contact me if you'd like
-the sample image, you can simply type `make` and reaPyr will run.  To wipe all existing
-data and run clean type `make clean && make`
-
-```bash
-user@system:~$ reaPyr.py [-h] -d DISKNAME [-o OFFSET] [-ss SECTSIZE]
-
-This program carves, or reaps, user credentials from a specified disk image.
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -d DISKNAME, --diskname DISKNAME
-                        Name of the disk image to reap.
-  -o OFFSET, --offset OFFSET
-                        Offset into disk where OS resides. Default is 0.
-  -ss SECTSIZE, --sectsize SECTSIZE
-                        Sector size of OS. Default is 512 bytes.
-```
 
 ###Future Work
 * Add support for running on multiple OS
