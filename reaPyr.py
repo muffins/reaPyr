@@ -31,9 +31,7 @@ See README.md for additional information.
 TODO:
 
 * Thunderbird
-
 * Fix Firefox Carving
-
 * Add/Check Vista+ Support
 
 
@@ -148,7 +146,9 @@ def reap(img, offs=0, ss=0):
     report(im_rpr.reap(d))
     clean("im")
 
-
+    # Add some newlines at the end of the report, in case
+    # we run multiple times in a row.
+    report(["\n\n"])
 
 
 if __name__ == "__main__":
