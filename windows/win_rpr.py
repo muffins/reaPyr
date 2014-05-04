@@ -131,7 +131,7 @@ def reap(d):
 	harvest.append(rpr_name+",win_creds_dump.txt,"+sha1+","+str(fsize)+","+desc)
 
 	"""
-		Carve NTUser.dat files for stored cached credentials.
+		Carve NTUser.dat files for stored cached credentials - This is essentially IE/Outlook
 	"""
 	user_dir = "/Documents and Settings/"
 	ntdat    = "/NTUSER.DAT"
@@ -149,17 +149,6 @@ def reap(d):
 				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
 				fsize      = os.path.getsize(dest_fname)
 				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
-
-
-	"""
-		IE Harvesting
-	"""
-
-
-	"""
-		Outlook Harvesting
-	"""
-
 
 	return harvest
 

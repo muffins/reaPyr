@@ -30,7 +30,7 @@ See README.md for additional information.
 
 TODO:
 
-* IE, Thunderbird, Outlook
+* Thunderbird
 
 * Fix Firefox Carving
 
