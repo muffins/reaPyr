@@ -15,6 +15,10 @@ def reap(d):
 	harvest  = []
 	rpr_name = "mozilla"
 	
+	"""
+		Firefox Harvesting
+	"""
+
 	key3db_n    = "key3.db"
 	sgnondb1_n  = "signons.sqlite"
 	sgnondb2_n  = "signons2.sqlite"
@@ -234,6 +238,14 @@ def reap(d):
 					sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
 					fsize      = os.path.getsize(dest_fname)
 					harvest.append(rpr_name+","+fname+","+sha1+","+str(fsize)+","+desc)
+
+
+
+
+	"""
+		Thunderbird Harvesting
+	"""
+
 
 	return harvest
 

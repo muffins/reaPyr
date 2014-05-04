@@ -223,12 +223,14 @@ def dump_hashes(sysaddr, samaddr):
     bootkey = get_bootkey(sysaddr)
     hbootkey = get_hbootkey(samaddr,bootkey)
 
+    hashes = []
     for user in get_user_keys(samaddr):
         lmhash,nthash = get_user_hashes(user,hbootkey)
         if not lmhash: lmhash = empty_lm
         if not nthash: nthash = empty_nt
         #print "%s:%d:%s:%s:::" % (get_user_name(user), int(user.Name,16),lmhash.encode('hex'), nthash.encode('hex'))
-        return "%s:%d:%s:%s:::" % (get_user_name(user), int(user.Name,16),lmhash.encode('hex'), nthash.encode('hex'))
+        hashes.append("%s:%d:%s:%s:::" % (get_user_name(user), int(user.Name,16),lmhash.encode('hex'), nthash.encode('hex')))
+    return hashes
 
 def dump_file_hashes(syshive_fname, samhive_fname):
     sysaddr = HiveFileAddressSpace(syshive_fname)

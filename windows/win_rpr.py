@@ -98,15 +98,16 @@ def reap(d):
 
 	# Dump the file hashes
 	hashes = pwdump("./disk_rec/system","./disk_rec/SAM")
-	if hashes:
-		fout.write("#"*30+"SAM HASHES"+"#"*30+"\n")
-		fout.write(hashes)
+	if hashes != []:
+		fout.write("#"*35+" SAM HASHES "+"#"*35+"\n")
+		for h in hashes:
+			fout.write(h+"\n")
 		fout.write("\n\n")
 
 	# Dump any cached credentials
 	caches = cachedump("./disk_rec/system","./disk_rec/security")
 	if caches and 'ERR' not in caches:
-		fout.write("#"*30+"CACHED PWS"+"#"*30+"\n")
+		fout.write("#"*35+" CACHED PWDS "+"#"*35+"\n")
 		fout.write(caches)
 		fout.write("\n\n")
 
@@ -116,10 +117,10 @@ def reap(d):
 	# Hex dump code from
 	secrets = lsadump("./disk_rec/system","./disk_rec/security")
 	if secrets != []:
-		fout.write("#"*30+"CACHED PWS"+"#"*30+"\n")
+		fout.write("#"*35+" LSA SECRETS "+"#"*35+"\n")
 		for k in secrets:
-			fout.write(k)
-			fout.write(dump(secrets[k], length=16))
+			fout.write(k+"\n")
+			fout.write(dump(secrets[k], length=16)+"\n")
 		fout.write("\n\n")
 
 	# Append the harvested file information to the list
@@ -134,39 +135,10 @@ def reap(d):
 	"""
 		IE Harvesting
 	"""
-	ie_basic_auth_xp1 = "/Documents and Settings/"
-	ie_basic_auth_xp2 = "/Application Data/Microsoft/Credentials/Credential store"
-	ie_basic_auth_vi1 = "/Users/"
-	ie_basic_auth_vi2 = "/AppData/Roaming/Microsoft/Credentials/Credential store"
 
-	users_xp = d.dir_carve(ie_basic_auth_xp1)
-	users_vi = d.dir_carve(ie_basic_auth_vi1)
-
-	if users_xp	!= [] and "ERROR" not in users_xp:
-		for u in users_xp:
-			fname = d.carve(ie_basic_auth_xp1+u+ie_basic_auth_xp2)
-			if os.path.exists(fname):
-				f = u+"_xp_"+fname.split('/')[-1]
-				os.rename(fname,os.path.join(d.rec_dir,f))
-
-				# Append the harvested file information to the list
-				dest_fname = os.path.join(d.rec_dir,f)
-				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
-				fsize      = os.path.getsize(dest_fname)
-				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
-
-	elif users_vi != [] and "ERROR" not in users_vi:
-		for u in users_vi:
-			fname = d.carve(ad_vi_1+"/"+u+ad_vi_2)
-			if os.path.exists(fname):
-				f = u+"_vi_"+fname.split('/')[-1]
-				os.rename(fname,os.path.join(d.rec_dir,f))
-
-				# Append the harvested file information to the list
-				dest_fname = os.path.join(d.rec_dir,f)
-				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
-				fsize      = os.path.getsize(dest_fname)
-				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
+	"""
+		Outlook Harvesting
+	"""
 
 
 	return harvest

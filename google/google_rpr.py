@@ -13,6 +13,10 @@ import sys, os, hashlib
 def reap(d):
 	
 	harvest  = []
+
+	"""
+		Chrome Harvesting
+	"""
 	rpr_name = "google"
 	desc     = "Google Chrome cached credentials file"
 

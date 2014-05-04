@@ -45,14 +45,14 @@ def dump(src, length=8):
 def reap(d):
 	# Registry hives containing NTLM password hashes.
 	
-	"""
-		Carve Pidgin .purple accounts file
-	"""
-
 	harvest  = [] # Return value
 	rpr_name = "im"
-	desc     = "Pidgin cached credentials file"
 
+	"""
+		Pidgin Harvesting
+	"""
+
+	desc     = "Pidgin cached credentials file"
 	appdata_xp = "/Documents and Settings"
 	appdata_vi = "/Users"
 
@@ -90,7 +90,9 @@ def reap(d):
 				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
 
 	"""
-		Carve Skype Credentials
+		Skype Harvesting
 	"""
+
+	
 
 	return harvest
