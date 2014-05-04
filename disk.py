@@ -50,7 +50,7 @@ class Disk:
 			self.fs = pytsk3.FS_Info(img, offset=self.part_offs*self.sect_size)
 
 		else:
-			print "ERROR: nable to find disk image %s!  Exiting." % img
+			print "ERROR: Unable to find disk image %s!  Exiting." % img
 			sys.exit(0)
 
 
@@ -188,7 +188,7 @@ if __name__ == "__main__":
 	p.add_argument("-f","--filename",help="File name to be carved out of the disk image.", required=True)
 	p.add_argument("-d","--diskname",help="Name of the disk image to reap.", required=True)
 	p.add_argument("-o","--offset",help="Offset into disk where OS resides.  Default is 0.", required=False)
-	p.add_argument("-ss","--sectsize",help="Sector size of OS.  Default is 512 bytes.", required=False)
+	p.add_argument("-s","--sectsize",help="Sector size of OS.  Default is 512 bytes.", required=False)
 	p.add_argument("-a","--absolute",action='store_true',help="Filename provided is an absolute path to the desired file. [T|F]", required=False)
 	args = p.parse_args()
 
