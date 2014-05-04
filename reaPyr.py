@@ -30,7 +30,7 @@ See README.md for additional information.
 
 TODO:
 
-* IE, Skype, Thunderbird, Outlook
+* IE, Thunderbird, Outlook
 
 * Fix Firefox Carving
 
@@ -130,7 +130,7 @@ def reap(img, offs=0, ss=0):
         directory so the next reaper can be run.
     """
     # Write out the title row
-    report(["Reaper Name, Carved File Name, SHA1Sum, Size of File, Description"])
+    report(["Reaper Name,Carved File Name,SHA1Sum,Size of File,Description"])
 
     # Reap Windows
     report(win_rpr.reap(d))

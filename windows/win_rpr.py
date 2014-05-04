@@ -130,6 +130,25 @@ def reap(d):
 	desc       = "Credential Hash Dump of Windows Accounts"
 	harvest.append(rpr_name+",win_creds_dump.txt,"+sha1+","+str(fsize)+","+desc)
 
+	"""
+		Carve NTUser.dat files for stored cached credentials.
+	"""
+	user_dir = "/Documents and Settings/"
+	ntdat    = "/NTUSER.DAT"
+	users_xp = d.dir_carve(user_dir)
+
+	if users_xp	!= [] and "ERROR" not in users_xp:
+		for u in users_xp:
+			fname = d.carve(user_dir+u+ntdat)
+			if os.path.exists(fname):
+				f = u+"_"+fname.split('/')[-1]
+				os.rename(fname,os.path.join(d.rec_dir,f))
+
+				# Append the harvested file information to the list
+				dest_fname = os.path.join(d.rec_dir,f)
+				sha1       = hashlib.sha1(open(dest_fname, 'rb').read()).hexdigest()
+				fsize      = os.path.getsize(dest_fname)
+				harvest.append(rpr_name+","+f+","+sha1+","+str(fsize)+","+desc)
 
 
 	"""
